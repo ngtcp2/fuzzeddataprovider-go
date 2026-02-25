@@ -98,7 +98,7 @@ func (fdp *FuzzedDataProvider) ConsumeRemainingRandomLengthString() string {
 	return fdp.ConsumeRandomLengthString(len(fdp.data))
 }
 
-type Integral interface {
+type integral interface {
 	~int | ~int8 | ~int16 | ~int32 | ~int64 |
 		~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64
 }
@@ -107,7 +107,7 @@ const (
 	charBit = 8
 )
 
-func consumeIntegralInRange[T Integral](
+func consumeIntegralInRange[T integral](
 	fdp *FuzzedDataProvider, minVal, maxVal T,
 ) T {
 	if minVal > maxVal {
@@ -328,11 +328,11 @@ func (fdp *FuzzedDataProvider) ConsumeUint64InRange(
 	return consumeIntegralInRange(fdp, minVal, maxVal)
 }
 
-type FloatingPoint interface {
+type floatingPoint interface {
 	~float32 | ~float64
 }
 
-func consumeFloatingPointInRange[T FloatingPoint](
+func consumeFloatingPointInRange[T floatingPoint](
 	fdp *FuzzedDataProvider, minVal, maxVal, limMax T,
 ) T {
 	if minVal > maxVal {
@@ -397,7 +397,7 @@ func (fdp *FuzzedDataProvider) ConsumeFloat64InRange(
 	return consumeFloatingPointInRange(fdp, minVal, maxVal, math.MaxFloat64)
 }
 
-func consumeProbability[T FloatingPoint](fdp *FuzzedDataProvider) T {
+func consumeProbability[T floatingPoint](fdp *FuzzedDataProvider) T {
 	if unsafe.Sizeof(T(0)) <= unsafe.Sizeof(uint32(0)) {
 		return T(fdp.ConsumeUint32()) / T(math.MaxUint32)
 	}
